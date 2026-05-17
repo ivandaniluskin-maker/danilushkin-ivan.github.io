@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Данилушкин Иван — PR & Event Manager</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a1a;
+    --ink2: #444;
+    --ink3: #888;
+    --line: #e5e2db;
+    --bg: #faf9f6;
+    --card: #ffffff;
+    --accent: #2c4a8a;
+    --accent2: #c8a96e;
+    --green: #2d6a4f;
+  }
+
+  body {
+    font-family: 'Golos Text', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,249,246,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .nav-name { font-weight: 600; font-size: 14px; letter-spacing: 0.02em; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { font-size: 13px; color: var(--ink2); }
+  .nav-links a:hover { color: var(--accent); text-decoration: none; }
+
+  /* HERO */
+  .hero {
+    max-width: 900px; margin: 0 auto;
+    padding: 80px 40px 60px;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 40px; align-items: center;
+  }
+  .hero-eyebrow {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent2);
+    margin-bottom: 12px;
+  }
+  .hero-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px; font-weight: 400; line-height: 1.1;
+    margin-bottom: 16px; color: var(--ink);
+  }
+  .hero-sub {
+    font-size: 16px; color: var(--ink2); max-width: 460px;
+    line-height: 1.6; margin-bottom: 28px;
+  }
+  .hero-contacts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .contact-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 20px; padding: 6px 14px;
+    font-size: 13px; color: var(--ink2);
+  }
+  .hero-badge {
+    background: var(--accent); color: #fff;
+    border-radius: 12px; padding: 20px 24px;
+    text-align: center; min-width: 160px;
+  }
+  .badge-num { font-size: 36px; font-weight: 600; line-height: 1; }
+  .badge-label { font-size: 12px; opacity: 0.85; margin-top: 4px; }
+
+  /* STATS BAR */
+  .stats-bar {
+    max-width: 900px; margin: 0 auto 0;
+    padding: 0 40px 60px;
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 12px;
+  }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 10px; padding: 18px 16px;
+  }
+  .stat-num { font-size: 28px; font-weight: 600; color: var(--accent); }
+  .stat-label { font-size: 12px; color: var(--ink3); margin-top: 4px; line-height: 1.4; }
+
+  /* SECTION */
+  section { max-width: 900px; margin: 0 auto; padding: 0 40px 60px; }
+  .section-header {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 28px; padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-num {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent2);
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px; font-weight: 400; color: var(--ink);
+  }
+
+  /* CASE CARDS */
+  .case-grid { display: grid; gap: 20px; }
+  .case-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; overflow: hidden;
+  }
+  .case-header {
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 16px;
+  }
+  .case-tag {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 4px 10px;
+    border-radius: 4px; white-space: nowrap;
+  }
+  .tag-pr { background: #e8eef8; color: var(--accent); }
+  .tag-event { background: #fdf3e3; color: #8a5c00; }
+  .tag-smm { background: #e8f5ee; color: var(--green); }
+  .tag-gr { background: #f3e8f8; color: #6a2d8a; }
+  .case-title {
+    font-size: 18px; font-weight: 600; color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .case-period { font-size: 13px; color: var(--ink3); }
+  .case-body { padding: 20px 28px; }
+  .case-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .case-block-title {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink3);
+    margin-bottom: 8px;
+  }
+  .case-block p { font-size: 13.5px; color: var(--ink2); line-height: 1.6; }
+  .result-list { list-style: none; }
+  .result-list li {
+    font-size: 13.5px; color: var(--ink2);
+    padding: 4px 0 4px 16px; position: relative; line-height: 1.5;
+  }
+  .result-list li::before {
+    content: "↑"; position: absolute; left: 0;
+    color: var(--green); font-size: 12px; top: 5px;
+  }
+  .case-metrics {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    padding: 16px 28px; background: #f9f8f5;
+    border-top: 1px solid var(--line);
+  }
+  .metric {
+    display: flex; flex-direction: column;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 8px; padding: 10px 16px; min-width: 110px;
+  }
+  .metric-val { font-size: 20px; font-weight: 600; color: var(--accent); }
+  .metric-desc { font-size: 11px; color: var(--ink3); margin-top: 2px; }
+
+  /* AWARDS */
+  .awards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .award-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 10px; padding: 18px 20px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .award-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .award-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .award-desc { font-size: 12.5px; color: var(--ink3); line-height: 1.4; }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+  .skill-group {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 10px; padding: 18px 20px;
+  }
+  .skill-group-title {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--accent2); margin-bottom: 10px;
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .skill-tag {
+    font-size: 12px; background: #f0eeea;
+    border-radius: 4px; padding: 3px 9px; color: var(--ink2);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--line);
+    max-width: 900px; margin: 0 auto;
+    padding: 32px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--ink3); font-size: 13px;
+  }
+
+  @media (max-width: 680px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-badge { display: none; }
+    .stats-bar { grid-template-columns: repeat(2,1fr); }
+    .case-cols { grid-template-columns: 1fr; }
+    .awards-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    nav { padding: 0 16px; }
+    .nav-links { gap: 14px; }
+    section, .hero, .stats-bar { padding-left: 16px; padding-right: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-name">Данилушкин Иван</div>
+  <div class="nav-links">
+    <a href="#cases">Кейсы</a>
+    <a href="#awards">Награды</a>
+    <a href="#skills">Навыки</a>
+    <a href="#contacts">Контакты</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">PR · Event · Digital Marketing</div>
+    <h1 class="hero-name">Данилушкин<br>Иван Олегович</h1>
+    <p class="hero-sub">Junior-специалист в PR, event-менеджменте и digital-коммуникациях. Опыт управления проектами федерального уровня, грантовой деятельности и GR-взаимодействия. Магистрант Финансового университета при Правительстве РФ.</p>
+    <div class="hero-contacts">
+      <span class="contact-pill">📞 +7 (928) 084-71-41</span>
+      <span class="contact-pill">✉️ ivandaniluskin@gmail.com</span>
+      <span class="contact-pill">📍 Москва</span>
+    </div>
+  </div>
+  <div class="hero-badge">
+    <div class="badge-num">23</div>
+    <div class="badge-label">года</div>
+    <div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.3);">
+      <div class="badge-num" style="font-size:22px;">3+</div>
+      <div class="badge-label">года проектной<br>деятельности</div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="stat-num">60+</div>
+    <div class="stat-label">мероприятий организовано регионального и федерального уровня</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">400k+</div>
+    <div class="stat-label">просмотров медиапроекта — в 4× больше плана</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">5 млн ₽</div>
+    <div class="stat-label">суммарный бюджет управляемых проектов</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">420k ₽</div>
+    <div class="stat-num" style="font-size:14px; font-weight:400; color:var(--ink3);">грант</div>
+    <div class="stat-label">Росмолодёжь.Гранты СКФО — 2024</div>
+  </div>
+</div>
+
+<!-- CASES -->
+<section id="cases">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Ключевые кейсы</h2>
+  </div>
+
+  <div class="case-grid">
+
+    <!-- CASE 1 -->
+    <div class="case-card">
+      <div class="case-header">
+        <div>
+          <div class="case-title">«ПроЗеленоеМедиа» — мультиплатформенный медиапроект</div>
+          <div class="case-period">2024 · Грантовый проект Росмолодёжи</div>
+        </div>
+        <span class="case-tag tag-pr">PR · Media</span>
+      </div>
+      <div class="case-body">
+        <div class="case-cols">
+          <div class="case-block">
+            <div class="case-block-title">Задача</div>
+            <p>Реализовать медиапроект по экологической тематике на грантовые средства, охватив целевую аудиторию 100 000 просмотров за 6 месяцев. Привлечь экспертов из бизнеса, госсектора и молодёжной политики.</p>
+          </div>
+          <div class="case-block">
+            <div class="case-block-title">Действия</div>
+            <p>Разработал медиастратегию с нуля. Запустил подкаст-серию и мультиплатформенный SMM на VK, Telegram, Дзен, RUTUBE. Лично провёл съёмку, монтаж и редактуру 15 выпусков. Привлёк 20+ экспертов.</p>
+          </div>
+          <div class="case-block">
+            <div class="case-block-title">Результат</div>
+            <ul class="result-list">
+              <li>Охват 400 000+ просмотров — план перевыполнен в 4 раза</li>
+              <li>230+ публикаций за 6 месяцев</li>
+              <li>15 подкастов с экспертами федерального уровня</li>
+              <li>Грант Росмолодёжи 420 000 ₽ закрыт с положительным отчётом</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="case-metrics">
+        <div class="metric"><span class="metric-val">×4</span><span class="metric-desc">к плановому охвату</span></div>
+        <div class="metric"><span class="metric-val">420k ₽</span><span class="metric-desc">бюджет гранта</span></div>
+        <div class="metric"><span class="metric-val">230+</span><span class="metric-desc">публикаций</span></div>
+        <div class="metric"><span class="metric-val">15</span><span class="metric-desc">подкастов</span></div>
+      </div>
+    </div>
+
+    <!-- CASE 2 -->
+    <div class="case-card">
+      <div class="case-header">
+        <div>
+          <div class="case-title">Digital-маркетинг Mikan Studio</div>
+          <div class="case-period">Дек. 2023 — Июл. 2025 · Студия татуировки и пирсинга</div>
+        </div>
+        <span class="case-tag tag-smm">SMM · Digital</span>
+      </div>
+      <div class="case-body">
+        <div class="case-cols">
+          <div class="case-block">
+            <div class="case-block-title">Задача</div>
+            <p>Выстроить digital-присутствие малого бизнеса с нуля: соцсети, геосервисы, клиентская база. Привлекать новую аудиторию и удерживать существующих клиентов при ограниченном бюджете.</p>
+          </div>
+          <div class="case-block">
+            <div class="case-block-title">Действия</div>
+            <p>Разработал SMM-стратегию для Instagram, Telegram, VK. Оптимизировал профили в Google, Яндекс.Картах, 2GIS. Внедрил CRM для автоматизации напоминаний. Организовал промоакции с блогерами.</p>
+          </div>
+          <div class="case-block">
+            <div class="case-block-title">Результат</div>
+            <ul class="result-list">
+              <li>Рейтинг в геосервисах вырос до 4.7–5.0</li>
+              <li>Охваты +30%</li>
+              <li>Конверсия заявок +15% через CRM</li>
+              <li>Повторные обращения клиентов выросли по данным CRM</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="case-metrics">
+        <div class="metric"><span class="metric-val">4.9★</span><span class="metric-desc">рейтинг в геосервисах</span></div>
+        <div class="metric"><span class="metric-val">+30%</span><span class="metric-desc">охваты соцсетей</span></div>
+        <div class="metric"><span class="metric-val">+15%</span><span class="metric-desc">конверсия заявок</span></div>
+      </div>
+    </div>
+
+    <!-- CASE 3 -->
+    <div class="case-card">
+      <div class="case-header">
+        <div>
+          <div class="case-title">Студенческое экологическое объединение КБГУ</div>
+          <div class="case-period">Сент. 2022 — Дек. 2023 · Руководитель</div>
+        </div>
+        <span class="case-tag tag-event">Event · GR</span>
+      </div>
+      <div class="case-body">
+        <div class="case-cols">
+          <div class="case-block">
+            <div class="case-block-title">Задача</div>
+            <p>Масштабировать студенческое объединение, выстроить PR-стратегию и установить партнёрства с государственными структурами. Реализовать события федерального уровня при университетском финансировании.</p>
+          </div>
+          <div class="case-block">
+            <div class="case-block-title">Действия</div>
+            <p>Перестроил форматы вовлечения аудитории. Выстроил GR-взаимодействие с Минприроды КБР, Минмолодёжи КБР, Администрацией Нальчика. Организовал 60+ мероприятий, управлял бюджетом проектов.</p>
+          </div>
+          <div class="case-block">
+            <div class="case-block-title">Результат</div>
+            <ul class="result-list">
+              <li>Актив вырос с 112 до 450 человек (+350%)</li>
+              <li>60+ мероприятий, охват 5 000+ участников</li>
+              <li>Суммарный бюджет проектов — свыше 5 млн ₽</li>
+              <li>10+ официальных благодарственных писем от ведомств</li>
+              <li>Вовлечённость в соцсетях +40% за год</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="case-metrics">
+        <div class="metric"><span class="metric-val">+350%</span><span class="metric-desc">рост команды</span></div>
+        <div class="metric"><span class="metric-val">5 000+</span><span class="metric-desc">участников событий</span></div>
+        <div class="metric"><span class="metric-val">5 млн ₽</span><span class="metric-desc">бюджет проектов</span></div>
+        <div class="metric"><span class="metric-val">+40%</span><span class="metric-desc">вовлечённость в соцсетях</span></div>
+      </div>
+    </div>
+
+    <!-- CASE 4 -->
+    <div class="case-card">
+      <div class="case-header">
+        <div>
+          <div class="case-title">Всемирный фестиваль молодёжи 2024</div>
+          <div class="case-period">2024 · Руководитель региональной делегации</div>
+        </div>
+        <span class="case-tag tag-gr">GR · Event</span>
+      </div>
+      <div class="case-body">
+        <div class="case-cols">
+          <div class="case-block">
+            <div class="case-block-title">Роль</div>
+            <p>Назначен руководителем региональной волонтёрской делегации КБР на федеральном мероприятии под патронажем Президента РФ. Ответственность за координацию команды, логистику и документооборот.</p>
+          </div>
+          <div class="case-block">
+            <div class="case-block-title">Действия</div>
+            <p>Формирование и координация делегации. Полный цикл организационной работы: логистика, расселение, тайминги, взаимодействие с федеральным оргкомитетом. Работа в условиях жёстких дедлайнов.</p>
+          </div>
+          <div class="case-block">
+            <div class="case-block-title">Итог</div>
+            <ul class="result-list">
+              <li>Делегация КБР успешно представлена на ВФМ-2024</li>
+              <li>Памятная медаль Президента РФ за вклад в организацию фестиваля</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- AWARDS -->
+<section id="awards">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Награды и достижения</h2>
+  </div>
+  <div class="awards-grid">
+    <div class="award-card">
+      <div class="award-icon" style="background:#fdf0e0;">🏅</div>
+      <div>
+        <div class="award-title">Памятная медаль Президента РФ</div>
+        <div class="award-desc">За вклад в организацию и проведение Всемирного фестиваля молодёжи 2024</div>
+      </div>
+    </div>
+    <div class="award-card">
+      <div class="award-icon" style="background:#e8eef8;">🏆</div>
+      <div>
+        <div class="award-title">Победитель «Студент года — 2024»</div>
+        <div class="award-desc">Номинация «Общественник года»</div>
+      </div>
+    </div>
+    <div class="award-card">
+      <div class="award-icon" style="background:#e8f5ee;">💰</div>
+      <div>
+        <div class="award-title">Грант Росмолодёжи — 420 000 ₽</div>
+        <div class="award-desc">Победитель конкурса «Росмолодёжь.Гранты СКФО — 2024» с проектом «ПроЗеленоеМедиа»</div>
+      </div>
+    </div>
+    <div class="award-card">
+      <div class="award-icon" style="background:#f3e8f8;">🌿</div>
+      <div>
+        <div class="award-title">Призёр «Зелёной премии» — 2023</div>
+        <div class="award-desc">Номинация «Образовательный проект года»</div>
+      </div>
+    </div>
+    <div class="award-card" style="grid-column: span 2;">
+      <div class="award-icon" style="background:#fdf3e3;">📜</div>
+      <div>
+        <div class="award-title">10+ благодарственных писем от государственных ведомств</div>
+        <div class="award-desc">Министерство природных ресурсов и экологии КБР · Министерство по делам молодёжи КБР · Администрация г. Нальчика</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Компетенции</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-group">
+      <div class="skill-group-title">PR & Коммуникации</div>
+      <div class="skill-tags">
+        <span class="skill-tag">PR-стратегия</span>
+        <span class="skill-tag">Пресс-релизы</span>
+        <span class="skill-tag">Медиапланирование</span>
+        <span class="skill-tag">GR-коммуникации</span>
+        <span class="skill-tag">Работа со СМИ</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Digital Marketing</div>
+      <div class="skill-tags">
+        <span class="skill-tag">SMM (VK, TG, IG)</span>
+        <span class="skill-tag">Контент-маркетинг</span>
+        <span class="skill-tag">CRM-системы</span>
+        <span class="skill-tag">Геосервисы</span>
+        <span class="skill-tag">RUTUBE / Дзен</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Event Management</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Организация мероприятий</span>
+        <span class="skill-tag">Бюджетирование</span>
+        <span class="skill-tag">Логистика</span>
+        <span class="skill-tag">Тайминг</span>
+        <span class="skill-tag">Командообразование</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Медиа & Продакшн</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Фото/видеосъёмка</span>
+        <span class="skill-tag">DaVinci Resolve</span>
+        <span class="skill-tag">Canva</span>
+        <span class="skill-tag">Подкасты</span>
+        <span class="skill-tag">Написание текстов</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Управление</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Управление командой до 30 чел.</span>
+        <span class="skill-tag">Грантовая деятельность</span>
+        <span class="skill-tag">Документооборот</span>
+        <span class="skill-tag">MS Office</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Языки & Развитие</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Русский — родной</span>
+        <span class="skill-tag">Английский B1</span>
+        <span class="skill-tag">Изучаю: Figma</span>
+        <span class="skill-tag">Изучаю: Google Analytics</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section>
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Образование</h2>
+  </div>
+  <div style="display:grid; gap:12px;">
+    <div class="award-card">
+      <div class="award-icon" style="background:#e8eef8; font-size:20px;">🎓</div>
+      <div style="flex:1;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div class="award-title">Финансовый университет при Правительстве РФ</div>
+          <span style="font-size:12px; color:#888;">2025 — 2027</span>
+        </div>
+        <div class="award-desc">Магистратура · PR and GR technologies in policy and business (обучение на английском языке)</div>
+      </div>
+    </div>
+    <div class="award-card">
+      <div class="award-icon" style="background:#e8f5ee; font-size:20px;">📚</div>
+      <div style="flex:1;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div class="award-title">КБГУ им. Х.М. Бербекова — диплом с отличием</div>
+          <span style="font-size:12px; color:#888;">2021 — 2025</span>
+        </div>
+        <div class="award-desc">Бакалавриат · Педагогическое образование</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section id="contacts">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Контакты</h2>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px;">
+    <div class="award-card" style="flex-direction:column; align-items:center; text-align:center; padding:24px 16px;">
+      <div style="font-size:28px; margin-bottom:8px;">📞</div>
+      <div class="award-title">Телефон</div>
+      <div class="award-desc">+7 (928) 084-71-41</div>
+    </div>
+    <div class="award-card" style="flex-direction:column; align-items:center; text-align:center; padding:24px 16px;">
+      <div style="font-size:28px; margin-bottom:8px;">✉️</div>
+      <div class="award-title">Email</div>
+      <div class="award-desc">ivandaniluskin@gmail.com</div>
+    </div>
+    <div class="award-card" style="flex-direction:column; align-items:center; text-align:center; padding:24px 16px;">
+      <div style="font-size:28px; margin-bottom:8px;">💬</div>
+      <div class="award-title">Telegram / VK</div>
+      <div class="award-desc">По QR-коду в резюме</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© Данилушкин Иван Олегович, 2026</span>
+  <span>Junior PR & Event Manager · Москва</span>
+</footer>
+
+</body>
+</html>
